@@ -48,6 +48,7 @@ FILE *open_file(char fileName[], char mode[])
         printf("Error: could not open file\n");
         exit(1);
     }
+    printf("File successfully loaded.\n");
     return file;
 }
 
@@ -63,11 +64,25 @@ FITNESS_DATA minStep(FITNESS_DATA fitnessData[], int arrayLen){
     return min;
 }
 
+FITNESS_DATA maxStep(FITNESS_DATA fitnessData[], int arrayLen){
+    FITNESS_DATA max;
+    max.steps = -1;
+    int a;
+    for(a=0; a<arrayLen; a++){
+        if(fitnessData[a].steps>max.steps){
+            max= fitnessData[a];
+        } 
+    }
+    return max;
+}
+
 // Complete the main function
 int main()
 {
     int buffer_size = 100;
     char line_buffer[buffer_size];
+    int counter = 0;
+    float mean = 0;
 
     int i = 0;
     FILE *file;
@@ -105,19 +120,35 @@ int main()
             break;
         case 'C':;
             FITNESS_DATA minimumSteps = minStep(data, i);
-            // FITNESS_DATA minimumSteps;
-            // minimumSteps=minStep(data, i);
             printf("Fewest steps: %s %s\n", minimumSteps.date, minimumSteps.time);
             break;
-        case 'D':
+        case 'D':;
+            FITNESS_DATA maximumSteps = maxStep(data, i);
+            printf("Largest steps: %s %s\n", maximumSteps.date, maximumSteps.time);
             break;
         case 'E':
+            file = open_file(filename, "r");
+            counter = 0;
+            while (fgets(line_buffer, buffer_size, file))
+            {
+                mean += data[counter].steps;
+                counter++;
+            }
+            mean /= counter;
+            int meanInt = (int) mean;
+            mean-= meanInt;
+            if (mean>0.5){
+                meanInt++;
+            }
+            printf("Mean step count: %d\n", meanInt);
             break;
         case 'F':
             break;
         case 'Q':
             exit(0);
             break;
+        default: printf("Invalid choice. Try again.");
         }
+        fclose(file);
     }
 }
