@@ -45,10 +45,22 @@ FILE *open_file(char fileName[], char mode[])
     FILE *file = fopen(fileName, mode);
     if (file == NULL)
     {
-        printf("Error: could not open file");
+        printf("Error: could not open file\n");
         exit(1);
     }
     return file;
+}
+
+FITNESS_DATA minStep(FITNESS_DATA fitnessData[], int arrayLen){
+    FITNESS_DATA min;
+    min.steps = 100000;
+    int a;
+    for(a=0; a<arrayLen; a++){
+        if(fitnessData[a].steps<min.steps){
+            min= fitnessData[a];
+        } 
+    }
+    return min;
 }
 
 // Complete the main function
@@ -59,11 +71,11 @@ int main()
 
     int i = 0;
     FILE *file;
-    char *filename;
+    char filename[buffer_size];
     char option=' ';
     FITNESS_DATA data[128];
     while(1){
-        printf("Choose from the following options:\n A: Specify the filename to be imported\n B: Display the total number of records in the file\n C: Find the date and time of the timeslot with the fewest steps\n D: Find the data and time of the timeslot with the largest number of steps\n E: Find the mean step count of all the records in the file\n F: Find the longest continuous period where the step count is above 500 steps\n Q: Exit\n ");
+        printf("Choose from the following options:\n A: Specify the filename to be imported\n B: Display the total number of records in the file\n C: Find the date and time of the timeslot with the fewest steps\n D: Find the data and time of the timeslot with the largest number of steps\n E: Find the mean step count of all the records in the file\n F: Find the longest continuous period where the step count is above 500 steps\n Q: Exit\n Enter choice: ");
         scanf(" %c", &option);
         switch (option)
         {
@@ -91,7 +103,11 @@ int main()
         case 'B':
             printf("Total records: %d\n", i);
             break;
-        case 'C':
+        case 'C':;
+            FITNESS_DATA minimumSteps = minStep(data, i);
+            // FITNESS_DATA minimumSteps;
+            // minimumSteps=minStep(data, i);
+            printf("Fewest steps: %s %s\n", minimumSteps.date, minimumSteps.time);
             break;
         case 'D':
             break;
