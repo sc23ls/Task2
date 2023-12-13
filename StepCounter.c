@@ -52,26 +52,32 @@ FILE *open_file(char fileName[], char mode[])
     return file;
 }
 
-FITNESS_DATA minStep(FITNESS_DATA fitnessData[], int arrayLen){
+FITNESS_DATA minStep(FITNESS_DATA fitnessData[], int arrayLen)
+{
     FITNESS_DATA min;
     min.steps = 100000;
     int a;
-    for(a=0; a<arrayLen; a++){
-        if(fitnessData[a].steps<min.steps){
-            min= fitnessData[a];
-        } 
+    for (a = 0; a < arrayLen; a++)
+    {
+        if (fitnessData[a].steps < min.steps)
+        {
+            min = fitnessData[a];
+        }
     }
     return min;
 }
 
-FITNESS_DATA maxStep(FITNESS_DATA fitnessData[], int arrayLen){
+FITNESS_DATA maxStep(FITNESS_DATA fitnessData[], int arrayLen)
+{
     FITNESS_DATA max;
     max.steps = -1;
     int a;
-    for(a=0; a<arrayLen; a++){
-        if(fitnessData[a].steps>max.steps){
-            max= fitnessData[a];
-        } 
+    for (a = 0; a < arrayLen; a++)
+    {
+        if (fitnessData[a].steps > max.steps)
+        {
+            max = fitnessData[a];
+        }
     }
     return max;
 }
@@ -87,9 +93,10 @@ int main()
     int i = 0;
     FILE *file;
     char filename[buffer_size];
-    char option=' ';
+    char option = ' ';
     FITNESS_DATA data[128];
-    while(1){
+    while (1)
+    {
         printf("Choose from the following options:\n A: Specify the filename to be imported\n B: Display the total number of records in the file\n C: Find the date and time of the timeslot with the fewest steps\n D: Find the data and time of the timeslot with the largest number of steps\n E: Find the mean step count of all the records in the file\n F: Find the longest continuous period where the step count is above 500 steps\n Q: Exit\n Enter choice: ");
         scanf(" %c", &option);
         switch (option)
@@ -98,7 +105,7 @@ int main()
             printf("Input filename:");
             scanf("%s", filename);
             file = open_file(filename, "r");
-            
+
             char *delimeter = ", ";
             while (fgets(line_buffer, buffer_size, file) != NULL)
             {
@@ -135,9 +142,10 @@ int main()
                 counter++;
             }
             mean /= counter;
-            int meanInt = (int) mean;
-            mean-= meanInt;
-            if (mean>0.5){
+            int meanInt = (int)mean;
+            mean -= meanInt;
+            if (mean > 0.5)
+            {
                 meanInt++;
             }
             printf("Mean step count: %d\n", meanInt);
@@ -147,8 +155,9 @@ int main()
         case 'Q':
             exit(0);
             break;
-        default: printf("Invalid choice. Try again.");
+        default:
+            printf("Invalid choice. Try again.");
         }
-        fclose(file);
     }
+    fclose(file);
 }
